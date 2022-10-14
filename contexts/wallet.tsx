@@ -77,6 +77,7 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 	// 		connector.killSession();
 	// 	});
 	// }, [connector]);
+
 	// connector.on('connect', (error, payload) => {
 	// 	console.log('connect !!!!!');
 	// 	keplrWC = new KeplrWalletConnectV1(connector, {

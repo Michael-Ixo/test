@@ -30,8 +30,8 @@ const Home: NextPage = () => {
 				<section className={utilsStyles.section}>
 					<div className={cart.length > 0 ? utilsStyles.column : utilsStyles.columnCenter}>
 						{cart.map(c => (
-							<div className={styles.cookstoveImage}>
-								<Image src={cookstoveCard} />
+							<div key={c.id} className={styles.cookstoveImage}>
+								<Image src={cookstoveCard} alt={'cookstove' + c.id} />
 							</div>
 						))}
 						<DetailsCard Img={Stove} onClick={() => updateCartItem({ id: '1', price: 200 }, true)}>
