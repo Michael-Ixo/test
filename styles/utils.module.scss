@@ -1,0 +1,36 @@
+.main {
+	height: 100vh;
+	margin: 0 auto;
+	padding: 0 15px;
+	overflow-y: scroll;
+	max-width: 500px;
+	display: flex;
+	flex-direction: column;
+}
+
+.section {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	padding: 0 35px;
+}
+
+.column {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.columnCenter {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}

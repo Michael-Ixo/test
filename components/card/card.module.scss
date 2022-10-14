@@ -1,0 +1,69 @@
+.card {
+	border-radius: var(--card-border-radius);
+	background-color: var(--card-bg-color);
+	width: 100%;
+	margin-bottom: 16px;
+	padding: 15px;
+	position: relative;
+}
+
+.detailsCard {
+	display: flex;
+	flex-direction: row;
+	cursor: pointer;
+
+	.textContainer {
+		flex: 1;
+		margin-left: 5px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		.amountContainer {
+			display: flex;
+			flex-direction: row;
+			align-items: baseline;
+
+			.amount {
+				font-size: 3rem;
+				margin-right: 4px;
+				line-height: 2.7rem;
+			}
+		}
+
+		.spaceBetween {
+			margin-bottom: 5px;
+		}
+
+		.text {
+			margin: 0;
+		}
+	}
+}
+
+.detailsCardSmaller {
+	padding: 7px 15px !important;
+}
+
+.buttonCard {
+	background-color: var(--card-light-bg-color);
+	margin-top: 16px;
+}
+
+.successColor {
+	color: var(--success-color);
+}
+
+.invertedTextColor {
+	color: var(--main-font-color-inverted);
+}
+
+.accentBgColor {
+	background-color: var(--accent-color);
+}
+
+.invertedImgColor {
+	& path {
+		fill: var(--main-font-color-inverted);
+	}
+}

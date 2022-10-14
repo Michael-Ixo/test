@@ -1,0 +1,49 @@
+.dropdown {
+	width: 100%;
+}
+
+.token {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	min-height: 60px;
+	padding: 5px 0;
+
+	.label {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		p {
+			margin: 0 10px;
+		}
+	}
+
+	.value {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		justify-content: flex-end;
+
+		p {
+			margin: 0;
+		}
+
+		.price {
+			font-size: 0.75rem;
+		}
+
+		.amount {
+			padding-top: 15px;
+		}
+	}
+}
+
+.arrow {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	padding-right: 5px;
+}
