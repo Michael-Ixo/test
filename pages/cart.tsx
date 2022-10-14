@@ -19,11 +19,13 @@ import IconText from '@components/icon-text/icon-text';
 import Link from 'next/link';
 import CryptoPurchase from '@components/crypto-purchase/crypto-purchase';
 import Fail from '@icons/fail.svg';
+import { WalletContext } from '@contexts/wallet';
 
 const CartPage: NextPage = () => {
+	const { cart, updateCartItem } = useContext(CartContext);
+	const { wallet, createSession } = useContext(WalletContext);
 	const [walletError, setWalletError] = useState(false);
 	const [showWallet, setShowWallet] = useState(false);
-	const { cart, updateCartItem } = useContext(CartContext);
 	const cartNotEmpty = cart.length > 0;
 
 	return (
@@ -59,6 +61,9 @@ const CartPage: NextPage = () => {
 									</DetailsCard>
 									<DetailsCard Img={Crypto} onClick={() => setShowWallet(true)}>
 										pay with crypto
+									</DetailsCard>
+									<DetailsCard Img={Crypto} onClick={() => createSession()}>
+										Wallet Connect
 									</DetailsCard>
 								</>
 							) : (

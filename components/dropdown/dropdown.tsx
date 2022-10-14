@@ -33,7 +33,7 @@ const Dropdown: FC<DropdownProps> = ({ defaultValue, className, options, onChang
 			borderRadius: cardBorderRadius,
 			background: cardBGColor,
 			marginTop: 0,
-			marginBottom: '70px',
+			marginBottom: '65px',
 		}),
 		menuList: (base: any) => ({
 			...base,

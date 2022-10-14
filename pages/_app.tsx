@@ -3,12 +3,15 @@ import type { AppProps } from 'next/app';
 import '@styles/globals.scss';
 import '@styles/variables.scss';
 import { CartProvider } from '@contexts/cart';
+import { WalletProvider } from '@contexts/wallet';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 	return (
-		<CartProvider>
-			<Component {...pageProps} />
-		</CartProvider>
+		<WalletProvider>
+			<CartProvider>
+				<Component {...pageProps} />
+			</CartProvider>
+		</WalletProvider>
 	);
 }
 
