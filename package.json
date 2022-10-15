@@ -12,12 +12,7 @@
 	},
 	"dependencies": {
 		"@cosmjs/launchpad": "0.27.1",
-		"@keplr-wallet/cosmos": "^0.11.10",
-		"@keplr-wallet/types": "0.11.10",
-		"@keplr-wallet/wc-client": "0.11.10",
 		"@svgr/webpack": "6.3.1",
-		"@walletconnect/client": "1.8.0",
-		"@walletconnect/qrcode-modal": "1.8.0",
 		"axios": "0.27.2",
 		"buffer": "6.0.3",
 		"classnames": "2.3.1",

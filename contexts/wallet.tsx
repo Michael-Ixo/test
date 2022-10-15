@@ -1,7 +1,7 @@
 import { createContext, useState, HTMLAttributes, useEffect } from 'react';
-import WalletConnect from '@walletconnect/client';
-import QRCodeModal from '@walletconnect/qrcode-modal';
-import { KeplrWalletConnectV1 } from '@keplr-wallet/wc-client';
+// import WalletConnect from '@walletconnect/client';
+// import QRCodeModal from '@walletconnect/qrcode-modal';
+// import { KeplrWalletConnectV1 } from '@keplr-wallet/wc-client';
 import { BroadcastMode, StdTx } from '@cosmjs/launchpad';
 import axios from 'axios';
 
@@ -12,16 +12,16 @@ import { ChainInfos } from '@utils/chains';
 export const WalletContext = createContext({ wallet: {} as WALLET, updateWallet: (newWallet: WALLET, override?: boolean) => {}, createSession: () => {} });
 
 const createNewWallet = () => {
-	return new WalletConnect({
-		bridge: 'https://bridge.walletconnect.org',
-		qrcodeModal: QRCodeModal,
-		clientMeta: {
-			name: 'Ixo',
-			description: 'Ixo would like to connect',
-			url: 'https://ixo.world',
-			icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
-		},
-	});
+	// return new WalletConnect({
+	// 	bridge: 'https://bridge.walletconnect.org',
+	// 	qrcodeModal: QRCodeModal,
+	// 	clientMeta: {
+	// 		name: 'Ixo',
+	// 		description: 'Ixo would like to connect',
+	// 		url: 'https://ixo.world',
+	// 		icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
+	// 	},
+	// });
 };
 
 export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => {
@@ -40,16 +40,16 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 	};
 
 	const createSession = async () => {
-		if (connector.connected) {
-			connector.killSession();
-			await timeout(100);
-		}
-		connector = createNewWallet();
-		console.log('createSession !!!!!!');
-		if (!connector.connected) {
-			console.log('createSession create !!!!!!');
-			connector.createSession();
-		}
+		// if (connector.connected) {
+		// 	connector.killSession();
+		// 	await timeout(100);
+		// }
+		// connector = createNewWallet();
+		// console.log('createSession !!!!!!');
+		// if (!connector.connected) {
+		// 	console.log('createSession create !!!!!!');
+		// 	connector.createSession();
+		// }
 	};
 
 	// useEffect(() => {
@@ -107,7 +107,7 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 
 export async function sendTxWC(chainId: string, tx: StdTx | Uint8Array, mode: BroadcastMode): Promise<Uint8Array> {
 	const restInstance = axios.create({
-		baseURL: ChainInfos.find(chainInfo => chainInfo.chainId === chainId)!.rest,
+		// baseURL: ChainInfos.find(chainInfo => chainInfo.chainId === chainId)!.rest,
 	});
 
 	const isProtoTx = Buffer.isBuffer(tx) || tx instanceof Uint8Array;
