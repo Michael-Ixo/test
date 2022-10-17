@@ -1,7 +1,7 @@
 import { createContext, useState, HTMLAttributes, useEffect } from 'react';
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
-// import { KeplrWalletConnectV1 } from '@keplr-wallet/wc-client';
+import { KeplrWalletConnectV1 } from '@keplr-wallet/wc-client';
 import { BroadcastMode, StdTx } from '@cosmjs/launchpad';
 import axios from 'axios';
 
@@ -12,16 +12,22 @@ import { ChainInfos } from '@utils/chains';
 export const WalletContext = createContext({ wallet: {} as WALLET, updateWallet: (newWallet: WALLET, override?: boolean) => {}, createSession: () => {} });
 
 const createNewWallet = () => {
-	return new WalletConnect({
+	const wc = new WalletConnect({
 		bridge: 'https://bridge.walletconnect.org',
 		qrcodeModal: QRCodeModal,
-		clientMeta: {
-			name: 'Ixo',
-			description: 'Ixo would like to connect',
-			url: 'https://ixo.world',
-			icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
-		},
+		signingMethods: ['keplr_enable_wallet_connect_v1', 'keplr_sign_amino_wallet_connect_v1'],
 	});
+	console.log({ wc });
+
+	// XXX: I don't know why they designed that the client meta options in the constructor should be always ingored...
+	// @ts-ignore
+	// wc._clientMeta = {
+	// 	name: 'Ixo',
+	// 	description: 'Ixo would like to connect',
+	// 	url: 'https://ixo.world',
+	// 	icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
+	// };
+	return wc;
 };
 
 export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => {
@@ -52,31 +58,32 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 		}
 	};
 
-	// useEffect(() => {
-	// 	console.log('ran new collector effect');
-	// 	connector.on('connect', (error, payload) => {
-	// 		console.log('connect !!!!!');
-	// 		keplrWC = new KeplrWalletConnectV1(connector, {
-	// 			sendTx: sendTxWC,
-	// 		});
-	// 		if (error) console.error(error);
-	// 		const { accounts, chainId } = payload.params[0];
-	// 		updateWallet({ accounts, chainId });
-	// 	});
+	useEffect(() => {
+		console.log('ran new collector effect');
+		connector.on('connect', (error, payload) => {
+			console.log('connect !!!!!');
+			keplrWC = new KeplrWalletConnectV1(connector, {
+				sendTx: sendTxWC,
+			});
+			// keplrWC.s
+			if (error) throw error;
+			const { accounts, chainId } = payload.params[0];
+			updateWallet({ accounts, chainId });
+		});
 
-	// 	connector.on('session_update', (error, payload) => {
-	// 		console.log('session_update !!!!!!');
-	// 		if (error) console.error(error);
-	// 		const { accounts, chainId } = payload.params[0];
-	// 		updateWallet({ accounts, chainId });
-	// 	});
+		connector.on('session_update', (error, payload) => {
+			console.log('session_update !!!!!!');
+			if (error) throw error;
+			const { accounts, chainId } = payload.params[0];
+			updateWallet({ accounts, chainId });
+		});
 
-	// 	connector.on('disconnect', (error, payload) => {
-	// 		console.log('disconnect !!!!!!');
-	// 		if (error) console.error(error);
-	// 		connector.killSession();
-	// 	});
-	// }, [connector]);
+		connector.on('disconnect', (error, payload) => {
+			console.log('disconnect !!!!!!');
+			if (error) throw error;
+			connector.killSession();
+		});
+	}, [connector]);
 
 	// connector.on('connect', (error, payload) => {
 	// 	console.log('connect !!!!!');
@@ -107,7 +114,7 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 
 export async function sendTxWC(chainId: string, tx: StdTx | Uint8Array, mode: BroadcastMode): Promise<Uint8Array> {
 	const restInstance = axios.create({
-		// baseURL: ChainInfos.find(chainInfo => chainInfo.chainId === chainId)!.rest,
+		baseURL: ChainInfos.find(chainInfo => chainInfo.chainId === chainId)!.rest,
 	});
 
 	const isProtoTx = Buffer.isBuffer(tx) || tx instanceof Uint8Array;

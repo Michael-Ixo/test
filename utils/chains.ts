@@ -31,9 +31,32 @@ const IS_TESTNET = process.env.NEXT_PUBLIC_IS_TESTNET === 'true';
 const chainInfos = (
 	[
 		{
-			rpc: IS_TESTNET ? 'https://rpc-test.osmosis.zone/' : 'https://rpc-osmosis.keplr.app/',
-			rest: IS_TESTNET ? 'https://lcd-test.osmosis.zone/' : 'https://lcd-osmosis.keplr.app/',
-			chainId: IS_TESTNET ? 'osmo-test-4' : 'osmosis-1',
+			rpc: IS_TESTNET ? 'https://testnet.ixo.earth/rpc/' : 'https://rpc-impacthub.keplr.app',
+			rest: IS_TESTNET ? 'https://testnet.ixo.earth/rest/' : 'https://lcd-impacthub.keplr.app',
+			chainId: IS_TESTNET ? 'pandora-5' : 'impacthub-3',
+			chainName: IS_TESTNET ? 'IXO Testnet' : 'IXO',
+			bip44: {
+				coinType: 118,
+			},
+			bech32Config: Bech32Address.defaultBech32Config('ixo'),
+			currencies: [
+				{
+					coinDenom: 'IXO',
+					coinMinimalDenom: 'uixo',
+					coinDecimals: 6,
+					coinGeckoId: 'pool:uixo',
+					coinImageUrl: '/tokens/ixo.png',
+					isStakeCurrency: true,
+					isFeeCurrency: true,
+				},
+			],
+			features: ['stargate', 'ibc-transfer'],
+			explorerUrlToTx: IS_TESTNET ? 'https://blockscan-pandora.ixo.earth/transactions/{txHash}' : 'https://blockscan.ixo.world/transactions/{txHash}',
+		},
+		{
+			rpc: 'https://rpc-osmosis.keplr.app/',
+			rest: 'https://lcd-osmosis.keplr.app/',
+			chainId: 'osmosis-1',
 			chainName: 'Osmosis',
 			bip44: {
 				coinType: 118,
@@ -63,7 +86,7 @@ const chainInfos = (
 				high: 0.025,
 			},
 			features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go'],
-			explorerUrlToTx: IS_TESTNET ? 'https://testnet.mintscan.io/osmosis-testnet/txs/{txHash}' : 'https://www.mintscan.io/osmosis/txs/{txHash}',
+			explorerUrlToTx: 'https://www.mintscan.io/osmosis/txs/{txHash}',
 		},
 		{
 			rpc: 'https://rpc-cosmoshub.keplr.app',
@@ -558,29 +581,6 @@ const chainInfos = (
 			],
 			features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go'],
 			explorerUrlToTx: 'https://likecoin.bigdipper.live/transactions/{txHash}',
-		},
-		{
-			rpc: 'https://rpc-impacthub.keplr.app',
-			rest: 'https://lcd-impacthub.keplr.app',
-			chainId: 'impacthub-3',
-			chainName: 'IXO',
-			bip44: {
-				coinType: 118,
-			},
-			bech32Config: Bech32Address.defaultBech32Config('ixo'),
-			currencies: [
-				{
-					coinDenom: 'IXO',
-					coinMinimalDenom: 'uixo',
-					coinDecimals: 6,
-					coinGeckoId: 'pool:uixo',
-					coinImageUrl: '/tokens/ixo.png',
-					isStakeCurrency: true,
-					isFeeCurrency: true,
-				},
-			],
-			features: ['stargate', 'ibc-transfer'],
-			explorerUrlToTx: 'https://blockscan.ixo.world/transactions/{txHash}',
 		},
 		{
 			rpc: 'https://rpc.bitcanna.io',
@@ -1987,180 +1987,5 @@ const chainInfos = (
 		},
 	] as SimplifiedChainInfo[]
 ).map(createKeplrChainInfos);
-
-// Add normal chain infos in case of `currencies` not containing the stake or fee currency.
-chainInfos.push({
-	rpc: IS_TESTNET ? 'https://axelartest-rpc.quickapi.com/' : 'https://rpc-axelar.keplr.app', // source: https://docs.axelar.dev/resources
-	rest: IS_TESTNET ? 'https://axelartest-lcd.quickapi.com/' : 'https://lcd-axelar.keplr.app',
-	chainId: IS_TESTNET ? 'axelar-testnet-lisbon-3' : 'axelar-dojo-1',
-	chainName: 'Axelar',
-	stakeCurrency: {
-		coinDenom: 'AXL',
-		coinMinimalDenom: 'uaxl',
-		coinDecimals: 6,
-		coinGeckoId: 'axelar',
-		coinImageUrl: '/tokens/axl.svg',
-	},
-	bip44: {
-		coinType: 118,
-	},
-	bech32Config: Bech32Address.defaultBech32Config('axelar'),
-	currencies: [
-		{
-			coinDenom: 'AXL',
-			coinMinimalDenom: 'uaxl',
-			coinDecimals: 6,
-			coinGeckoId: 'pool:uaxl',
-			coinImageUrl: '/tokens/axl.svg',
-		},
-		{
-			coinDenom: IS_TESTNET ? 'aUSDC' : 'USDC',
-			coinMinimalDenom: IS_TESTNET ? 'uausdc' : 'uusdc',
-			coinDecimals: 6,
-			coinGeckoId: 'usd-coin',
-			coinImageUrl: '/tokens/usdc.svg',
-			pegMechanism: 'collateralized',
-		},
-		{
-			coinDenom: 'FRAX',
-			coinMinimalDenom: 'frax-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'frax',
-			coinImageUrl: '/tokens/frax.svg',
-			pegMechanism: 'hybrid',
-		},
-		{
-			coinDenom: 'USDT',
-			coinMinimalDenom: 'uusdt',
-			coinDecimals: 6,
-			coinGeckoId: 'tether',
-			coinImageUrl: '/tokens/usdt.svg',
-			pegMechanism: 'collateralized',
-		},
-		{
-			coinDenom: 'DAI',
-			coinMinimalDenom: 'dai-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'dai',
-			coinImageUrl: '/tokens/dai.svg',
-			pegMechanism: 'collateralized',
-		},
-		{
-			coinDenom: 'WETH',
-			coinMinimalDenom: 'weth-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'weth',
-			coinImageUrl: '/tokens/weth.png',
-		},
-		{
-			coinDenom: 'WBTC',
-			coinMinimalDenom: 'wbtc-satoshi',
-			coinDecimals: 8,
-			coinGeckoId: 'wrapped-bitcoin',
-			coinImageUrl: '/tokens/wbtc.png',
-		},
-		{
-			coinDenom: 'LINK',
-			coinMinimalDenom: 'link-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'chainlink',
-			coinImageUrl: '/tokens/link.svg',
-		},
-		{
-			coinDenom: 'AAVE',
-			coinMinimalDenom: 'aave-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'aave',
-			coinImageUrl: '/tokens/aave.svg',
-		},
-		{
-			coinDenom: 'APE',
-			coinMinimalDenom: 'ape-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'apecoin',
-			coinImageUrl: '/tokens/ape.svg',
-		},
-		{
-			coinDenom: 'AXS',
-			coinMinimalDenom: 'axs-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'axie-infinity',
-			coinImageUrl: '/tokens/axs.svg',
-		},
-		{
-			coinDenom: 'MKR',
-			coinMinimalDenom: 'mkr-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'maker',
-			coinImageUrl: '/tokens/mkr.svg',
-		},
-		{
-			coinDenom: 'RAI',
-			coinMinimalDenom: 'rai-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'rai',
-			coinImageUrl: '/tokens/rai.svg',
-		},
-		{
-			coinDenom: 'SHIB',
-			coinMinimalDenom: 'shib-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'shiba-inu',
-			coinImageUrl: '/tokens/shib.svg',
-		},
-		{
-			coinDenom: 'stETH',
-			coinMinimalDenom: 'steth-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'staked-ether',
-			coinImageUrl: '/tokens/steth.svg',
-		},
-		{
-			coinDenom: 'UNI',
-			coinMinimalDenom: 'uni-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'uniswap',
-			coinImageUrl: '/tokens/uni.svg',
-		},
-		{
-			coinDenom: 'XCN',
-			coinMinimalDenom: 'xcn-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'chain-2',
-			coinImageUrl: '/tokens/xcn.svg',
-		},
-		{
-			coinDenom: 'WGLMR',
-			coinMinimalDenom: 'wglmr-wei',
-			coinDecimals: 18,
-			coinGeckoId: 'wrapped-moonbeam',
-			coinImageUrl: '/tokens/glmr.svg',
-		},
-		{
-			coinDenom: 'DOT',
-			coinMinimalDenom: 'dot-planck',
-			coinDecimals: 10,
-			coinGeckoId: 'polkadot',
-			coinImageUrl: '/tokens/dot.svg',
-		},
-	],
-	feeCurrencies: [
-		{
-			coinDenom: 'AXL',
-			coinMinimalDenom: 'uaxl',
-			coinDecimals: 6,
-			coinGeckoId: 'axelar',
-			coinImageUrl: '/tokens/axl.svg',
-		},
-	],
-	// @ts-ignore
-	gasPriceStep: {
-		low: 0.00005,
-		average: 0.00007,
-		high: 0.00009,
-	},
-	features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go'],
-	explorerUrlToTx: IS_TESTNET ? 'https://testnet.axelarscan.io/tx/{txHash}' : 'https://axelarscan.io/tx/{txHash}',
-});
 
 export const ChainInfos: ChainInfoWithExplorer[] = chainInfos;
