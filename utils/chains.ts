@@ -44,7 +44,7 @@ const chainInfos = (
 					coinDenom: 'IXO',
 					coinMinimalDenom: 'uixo',
 					coinDecimals: 6,
-					coinGeckoId: 'pool:uixo',
+					coinGeckoId: 'ixo',
 					coinImageUrl: '/tokens/ixo.png',
 					isStakeCurrency: true,
 					isFeeCurrency: true,

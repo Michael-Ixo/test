@@ -4,6 +4,7 @@ import QRCodeModal from '@walletconnect/qrcode-modal';
 import { KeplrWalletConnectV1 } from '@keplr-wallet/wc-client';
 import { BroadcastMode, StdTx } from '@cosmjs/launchpad';
 import axios from 'axios';
+import { fromBase64 } from '@cosmjs/encoding';
 
 import { WALLET } from 'types/wallet';
 import { timeout } from '@utils/general';
@@ -21,12 +22,12 @@ const createNewWallet = () => {
 
 	// XXX: I don't know why they designed that the client meta options in the constructor should be always ingored...
 	// @ts-ignore
-	// wc._clientMeta = {
-	// 	name: 'Ixo',
-	// 	description: 'Ixo would like to connect',
-	// 	url: 'https://ixo.world',
-	// 	icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
-	// };
+	wc._clientMeta = {
+		name: 'Ixo',
+		description: 'Ixo would like to connect',
+		url: 'https://ixo.world',
+		icons: ['https://gblobscdn.gitbook.com/spaces%2F-LJJeCjcLrr53DcT1Ml7%2Favatar.png?alt=media'],
+	};
 	return wc;
 };
 
@@ -47,25 +48,36 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 
 	const createSession = async () => {
 		if (connector.connected) {
-			connector.killSession();
-			await timeout(100);
+			console.log('connected');
+			createEffects();
+			createKeplWC();
+			return;
+			// connector.killSession();
+			// await timeout(100);
 		}
 		connector = createNewWallet();
 		console.log('createSession !!!!!!');
 		if (!connector.connected) {
 			console.log('createSession create !!!!!!');
-			connector.createSession();
+			await connector.createSession();
+			createEffects();
 		}
 	};
 
-	useEffect(() => {
-		console.log('ran new collector effect');
+	const createKeplWC = async () => {
+		keplrWC = new KeplrWalletConnectV1(connector, {
+			sendTx: sendTxWC,
+		});
+		// keplrWC.signDirect();
+		// keplrWC.experimentalSuggestChain(ChainInfos.find(chainInfo => chainInfo.chainId === 'pandora-5' || chainInfo.chainId === 'impacthub-3') as any);
+		console.log(await keplrWC.getKey('impacthub-3'));
+		// keplrWC.sendTx('impacthub-3', fromBase64('asdasdas'), BroadcastMode.Block);
+	};
+
+	const createEffects = () => {
 		connector.on('connect', (error, payload) => {
 			console.log('connect !!!!!');
-			keplrWC = new KeplrWalletConnectV1(connector, {
-				sendTx: sendTxWC,
-			});
-			// keplrWC.s
+			createKeplWC();
 			if (error) throw error;
 			const { accounts, chainId } = payload.params[0];
 			updateWallet({ accounts, chainId });
@@ -83,30 +95,7 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 			if (error) throw error;
 			connector.killSession();
 		});
-	}, [connector]);
-
-	// connector.on('connect', (error, payload) => {
-	// 	console.log('connect !!!!!');
-	// 	keplrWC = new KeplrWalletConnectV1(connector, {
-	// 		sendTx: sendTxWC,
-	// 	});
-	// 	if (error) console.error(error);
-	// 	const { accounts, chainId } = payload.params[0];
-	// 	updateWallet({ accounts, chainId });
-	// });
-
-	// connector.on('session_update', (error, payload) => {
-	// 	console.log('session_update !!!!!!');
-	// 	if (error) console.error(error);
-	// 	const { accounts, chainId } = payload.params[0];
-	// 	updateWallet({ accounts, chainId });
-	// });
-
-	// connector.on('disconnect', (error, payload) => {
-	// 	console.log('disconnect !!!!!!');
-	// 	if (error) console.error(error);
-	// 	connector.killSession();
-	// });
+	};
 
 	const value = { wallet, updateWallet, createSession };
 	return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
