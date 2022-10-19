@@ -10,9 +10,9 @@ import { DetailsCard } from '@components/card/card';
 import Stove from '@icons/stove.svg';
 import Loader from '@components/loader/loader';
 import { CartContext } from '@contexts/cart';
-import cookstoveCard from '@images/cookstove-card.png';
 import Image from 'next/image';
 import Cart from '@components/cart/cart';
+import Cookstove from '@components/cookstove/cookstove';
 
 const Home: NextPage = () => {
 	const { cart, updateCartItem } = useContext(CartContext);
@@ -31,7 +31,7 @@ const Home: NextPage = () => {
 					<div className={cart.length > 0 ? utilsStyles.column : utilsStyles.columnCenter}>
 						{cart.map(c => (
 							<div key={c.id} className={styles.cookstoveImage}>
-								<Image src={cookstoveCard} alt={'cookstove' + c.id} />
+								<Cookstove />
 							</div>
 						))}
 						<DetailsCard Img={Stove} onClick={() => updateCartItem({ id: '1', price: 200 }, true)}>

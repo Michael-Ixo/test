@@ -18,7 +18,7 @@ const createNewWallet = () => {
 		qrcodeModal: QRCodeModal,
 		signingMethods: ['keplr_enable_wallet_connect_v1', 'keplr_sign_amino_wallet_connect_v1'],
 	});
-	console.log({ wc });
+	// console.log({ wc });
 
 	// XXX: I don't know why they designed that the client meta options in the constructor should be always ingored...
 	// @ts-ignore
@@ -39,7 +39,12 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 
 	useEffect(() => {
 		console.log(wallet);
-	}, [wallet]);
+		if (connector.connected) {
+			console.log('connected init');
+			createEffects();
+			createKeplWC();
+		}
+	}, []);
 
 	const updateWallet = (newWallet: {}, override: boolean = false) => {
 		if (override) setWallet(newWallet);
@@ -47,6 +52,7 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 	};
 
 	const createSession = async () => {
+		console.log('createSession');
 		if (connector.connected) {
 			console.log('connected');
 			createEffects();
@@ -56,9 +62,8 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 			// await timeout(100);
 		}
 		connector = createNewWallet();
-		console.log('createSession !!!!!!');
 		if (!connector.connected) {
-			console.log('createSession create !!!!!!');
+			console.log('createSession create');
 			await connector.createSession();
 			createEffects();
 		}
@@ -93,7 +98,11 @@ export const WalletProvider = ({ children }: HTMLAttributes<HTMLDivElement>) => 
 		connector.on('disconnect', (error, payload) => {
 			console.log('disconnect !!!!!!');
 			if (error) throw error;
-			connector.killSession();
+			try {
+				connector.killSession();
+			} catch (error) {
+				console.error(error);
+			}
 		});
 	};
 

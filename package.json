@@ -16,6 +16,7 @@
 		"@keplr-wallet/cosmos": "0.11.10",
 		"@keplr-wallet/types": "0.11.10",
 		"@keplr-wallet/wc-client": "0.10.24",
+		"@ramonak/react-progress-bar": "^5.0.3",
 		"@svgr/webpack": "6.3.1",
 		"@walletconnect/client": "1.8.0",
 		"@walletconnect/qrcode-modal": "1.8.0",
